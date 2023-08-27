@@ -49,8 +49,9 @@ class MainActivity : ComponentActivity() {
                             composable(route = Constants.ROUTE_ADD_EDIT_NOTE + "{noteId}",
                                 arguments = listOf(navArgument(KEY_NOTE_ID) {
                                     type = NavType.IntType
-                                })) {
-                                NoteDetailScreen()
+                                })
+                            ) {
+                                NoteDetailScreen(snackbarHostState = snackbarHostState)
                             }
                         }
                     }

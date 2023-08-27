@@ -1,6 +1,8 @@
 package com.pkg.noteapp.presentation.noteDetail
 
 import android.os.SystemClock
+import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +10,7 @@ import com.pkg.noteapp.domain.Note
 import com.pkg.noteapp.domain.NoteRepository
 import com.pkg.noteapp.util.ColorResource
 import com.pkg.noteapp.util.Constants.KEY_NOTE_ID
+import com.pkg.noteapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,16 +32,40 @@ class NoteDetailsViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     fun insertOrUpdateNote() {
-        viewModelScope.launch {
-            val note = Note(
-                description = _uiState.value.description,
-                title = _uiState.value.title ?: "",
-                color = _uiState.value.color,
-                id = _uiState.value.noteId,
-                dateTime = SystemClock.currentThreadTimeMillis()
-            )
-            repo.insertOrUpdateNote(note)
+        if (validateFields()) {
+            viewModelScope.launch {
+                val note = Note(
+                    description = _uiState.value.description,
+                    title = _uiState.value.title ?: "",
+                    color = _uiState.value.color,
+                    id = _uiState.value.noteId,
+                    dateTime = SystemClock.currentThreadTimeMillis()
+                )
+                val result = repo.insertOrUpdateNote(note)
+                when (result) {
+                    is Resource.Error -> _uiState.value = _uiState.value.copy(message = result.msg)
+                    is Resource.Success -> _uiState.value =
+                        _uiState.value.copy(message = result.data)
+
+                    else -> {
+                        Log.i("TAG", "")
+                    }
+
+                }
+            }
         }
+    }
+
+    private fun validateFields(): Boolean {
+        if (TextUtils.isEmpty(_uiState.value.title)) {
+            _uiState.value = _uiState.value.copy(message = "Please enter title")
+            return false
+        } else if (TextUtils.isEmpty(_uiState.value.description)) {
+            _uiState.value = _uiState.value.copy(message = "Please enter description")
+            return false
+        }
+
+        return true
     }
 
     fun getNoteById() {
@@ -70,6 +97,10 @@ class NoteDetailsViewModel @Inject constructor(
 
     fun updateBgColor(colorResource: ColorResource) {
         _uiState.value = _uiState.value.copy(color = colorResource)
+    }
+
+    fun snackBarShown() {
+        _uiState.value = _uiState.value.copy(message = null)
     }
 
     data class UiState(

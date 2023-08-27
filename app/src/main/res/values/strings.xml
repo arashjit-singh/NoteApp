@@ -8,4 +8,7 @@
     <string name="date">Date</string>
     <string name="title">Title</string>
     <string name="descending">Descending</string>
+    <string name="description">Description...</string>
+    <string name="label_title">Title...</string>
+    <string name="content_dec_delete_note">Delete note</string>
 </resources>

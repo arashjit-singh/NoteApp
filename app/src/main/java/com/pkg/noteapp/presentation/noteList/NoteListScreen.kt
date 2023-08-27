@@ -38,8 +38,7 @@ fun NoteListScreen(
     LaunchedEffect(key1 = state.value.message) {
         state.value.message?.let {
             val resp = snackbarHostState.showSnackbar(
-                message = it,
-                actionLabel = context.getString(R.string.undo)
+                message = it, actionLabel = context.getString(R.string.undo)
             )
             when (resp) {
                 SnackbarResult.Dismissed -> {
@@ -64,9 +63,7 @@ fun NoteListScreen(
                 viewModel.updateSortBy(it)
             }, onUpdateSortOrder = {
                 viewModel.updateSortOrder(it)
-            },
-                sortBy = state.value.sortBy,
-                sortOrder = state.value.sortOrder
+            }, sortBy = state.value.sortBy, sortOrder = state.value.sortOrder
             )
             LazyColumn {
                 items(state.value.list) {

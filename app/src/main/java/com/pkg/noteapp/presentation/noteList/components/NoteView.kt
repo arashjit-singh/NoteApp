@@ -1,5 +1,6 @@
 package com.pkg.noteapp.presentation.noteList.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,9 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,63 +36,66 @@ fun NoteView(
     onNoteClick: (note: Note) -> Unit,
     onDeleteNode: (note: Note) -> Unit,
 ) {
-
-    Column() {
-        Row() {
-            Card(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        onNoteClick(note)
-                    }
+    Card(modifier = modifier
+        .fillMaxWidth()
+        .clickable {
+            onNoteClick(note)
+        }
+        .padding(top = 4.dp, bottom = 4.dp, start = 7.dp, end = 7.dp)
+    ) {
+        Row(modifier = Modifier.background(color = Color(note.color.value)), verticalAlignment = Alignment.Bottom) {
+            Column(
+                modifier = Modifier
+                    .padding(7.dp)
+                    .weight(1.0f)
             ) {
-                Box() {
-                    Column() {
-                        Text(
-                            text = note.title, style = TextStyle(
-                                fontSize = 24.sp, fontWeight = FontWeight.SemiBold
-                            ), modifier = Modifier.padding(7.dp)
-                        )
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(
-                            text = note.description ?: "", style = TextStyle(
-                                fontSize = 20.sp, fontWeight = FontWeight.Normal
-                            ), modifier = Modifier.padding(7.dp)
-                        )
-                    }
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_delete),
-                        contentDescription = "Delete note",
-                        modifier =
-                        Modifier
-                            .align(Alignment.BottomEnd)
-                            .size(40.dp)
-                            .clickable {
-                                onDeleteNode(note)
-                            }
+                Text(
+                    text = note.title,
+                    style = TextStyle(
+                        fontSize = 24.sp, fontWeight = FontWeight.SemiBold
+                    ),
+                    modifier = Modifier.padding(7.dp),
+
                     )
-                }
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = note.description ?: "",
+                    style = TextStyle(
+                        fontSize = 20.sp, fontWeight = FontWeight.Normal
+                    ),
+                    modifier = Modifier.padding(7.dp),
+                    maxLines = 5,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
 
+            Box {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_delete),
+                    contentDescription = stringResource(R.string.content_dec_delete_note),
+                    modifier = Modifier
+                        .clickable {
+                            onDeleteNode(note)
+                        }
+                        .size(60.dp)
+                        .align(Alignment.BottomEnd)
+                        .padding(10.dp)
+                )
+            }
         }
-        Spacer(modifier = Modifier.height(10.dp))
     }
-
-
 }
 
 @Composable
 @Preview
 fun NotePreView() {
-    NoteView(
-        note = Note(
-            id = null,
-            title = "Lorem Ipsum",
-            description = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-            dateTime = 10L,
-            color = ColorResource.Yellow
-        ), onNoteClick = {
+    NoteView(note = Note(
+        id = null,
+        title = "Lorem Ipsum",
+        description = "Lorem Ipsum",
+        dateTime = 10L,
+        color = ColorResource.Yellow
+    ), onNoteClick = {
 
-        }, onDeleteNode = {}
-    )
+    }, onDeleteNode = {})
 }

@@ -1,6 +1,7 @@
 package com.pkg.noteapp.presentation.noteDetail.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -21,30 +22,40 @@ import com.pkg.noteapp.util.ColorResource
 @Composable
 fun ColorPickerView(
     modifier: Modifier = Modifier,
+    currentValue: ColorResource,
     onColorSelected: (ColorResource) -> Unit,
 ) {
     Row(
         modifier
             .fillMaxWidth()
-            .padding(7.dp),
+            .padding(10.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        ColorView(ColorResource.Blue) { onColorSelected(it) }
-        ColorView(ColorResource.Yellow) { onColorSelected(it) }
-        ColorView(ColorResource.Magenta) { onColorSelected(it) }
-        ColorView(ColorResource.Cyan) { onColorSelected(it) }
-        ColorView(ColorResource.White) { onColorSelected(it) }
+        ColorView(ColorResource.Blue, currentValue) { onColorSelected(it) }
+        ColorView(ColorResource.Yellow, currentValue) { onColorSelected(it) }
+        ColorView(ColorResource.Magenta, currentValue) { onColorSelected(it) }
+        ColorView(ColorResource.Cyan, currentValue) { onColorSelected(it) }
+        ColorView(ColorResource.White, currentValue) { onColorSelected(it) }
     }
 }
 
 @Composable
-fun ColorView(color: ColorResource, onColorSelected: (ColorResource) -> Unit) {
+fun ColorView(
+    color: ColorResource,
+    currentValue: ColorResource,
+    onColorSelected: (ColorResource) -> Unit,
+) {
     Text(
         text = "", modifier = Modifier
             .background(
                 shape = RoundedCornerShape(40.dp),
                 color = Color(color.value)
             )
+            .border(
+                width = 1.dp,
+                color = if (currentValue == color) Color.Black else Color.Transparent
+            )
+            .clipToBounds()
             .size(40.dp)
             .clip(RoundedCornerShape(40.dp))
             .clipToBounds()
@@ -57,5 +68,5 @@ fun ColorView(color: ColorResource, onColorSelected: (ColorResource) -> Unit) {
 @Composable
 @Preview
 fun PreviewColorPickerView() {
-    ColorPickerView(onColorSelected = {})
+    ColorPickerView(onColorSelected = {}, currentValue = ColorResource.Yellow)
 }
