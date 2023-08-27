@@ -15,17 +15,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteListViewModel @Inject constructor(
-    private val repo: NoteRepository,
-    private val savedStateHandle: SavedStateHandle,
+    private val repo: NoteRepository
 ) : ViewModel() {
-    init {
-        getAllNotesFromDb()
-    }
 
     private var _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
     private var currentNote: Note? = null
+
+    init {
+        getAllNotesFromDb()
+    }
 
     private fun getAllNotesFromDb() {
         viewModelScope.launch {
@@ -33,7 +33,9 @@ class NoteListViewModel @Inject constructor(
                 sortBy = _uiState.value.sortBy,
                 sortOrder = _uiState.value.sortOrder
             ).collect { list ->
-                _uiState.emit(UiState(list = list))
+                _uiState.value = _uiState.value.copy(
+                    list = list
+                )
             }
         }
     }
