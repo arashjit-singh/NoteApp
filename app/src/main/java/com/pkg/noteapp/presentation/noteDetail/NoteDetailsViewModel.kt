@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pkg.noteapp.domain.Note
 import com.pkg.noteapp.domain.NoteRepository
+import com.pkg.noteapp.util.ColorResource
 import com.pkg.noteapp.util.Constants.KEY_NOTE_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,11 +19,13 @@ class NoteDetailsViewModel @Inject constructor(
     private val repo: NoteRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    private var _uiState: MutableStateFlow<UiState>
+
     init {
+        _uiState = MutableStateFlow(UiState())
         getNoteById()
     }
 
-    private var _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
     fun insertOrUpdateNote() {
@@ -30,7 +33,7 @@ class NoteDetailsViewModel @Inject constructor(
             val note = Note(
                 description = _uiState.value.description,
                 title = _uiState.value.title ?: "",
-                color = 0,
+                color = _uiState.value.color,
                 id = _uiState.value.noteId,
                 dateTime = SystemClock.currentThreadTimeMillis()
             )
@@ -47,7 +50,8 @@ class NoteDetailsViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(
                         title = it.title,
                         description = it.description,
-                        noteId = it.id
+                        noteId = it.id,
+                        color = it.color
                     )
                 }
             }
@@ -64,10 +68,15 @@ class NoteDetailsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(description = text)
     }
 
+    fun updateBgColor(colorResource: ColorResource) {
+        _uiState.value = _uiState.value.copy(color = colorResource)
+    }
+
     data class UiState(
         var message: String? = null,
         var title: String? = null,
         var description: String? = null,
+        var color: ColorResource = ColorResource.White,
         var noteId: Int? = null,
     )
 

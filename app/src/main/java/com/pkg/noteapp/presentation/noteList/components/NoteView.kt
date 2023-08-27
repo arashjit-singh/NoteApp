@@ -23,13 +23,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pkg.noteapp.R
 import com.pkg.noteapp.domain.Note
+import com.pkg.noteapp.util.ColorResource
 
 @Composable
 fun NoteView(
     modifier: Modifier = Modifier,
     note: Note,
     onNoteClick: (note: Note) -> Unit,
-    onDeleteNode:(note:Note) -> Unit
+    onDeleteNode: (note: Note) -> Unit,
 ) {
 
     Column() {
@@ -59,9 +60,12 @@ fun NoteView(
                         painter = painterResource(id = R.drawable.ic_delete),
                         contentDescription = "Delete note",
                         modifier =
-                        Modifier.align(Alignment.BottomEnd).size(40.dp).clickable {
-                            onDeleteNode(note)
-                        }
+                        Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(40.dp)
+                            .clickable {
+                                onDeleteNode(note)
+                            }
                     )
                 }
             }
@@ -82,7 +86,7 @@ fun NotePreView() {
             title = "Lorem Ipsum",
             description = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
             dateTime = 10L,
-            color = 0
+            color = ColorResource.Yellow
         ), onNoteClick = {
 
         }, onDeleteNode = {}

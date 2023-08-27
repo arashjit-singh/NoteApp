@@ -10,5 +10,5 @@ data class NoteEntity(
     val title: String,
     val description: String?,
     val dateTime: Long,
-    val color: Int,
+    val color: Long,
 )
