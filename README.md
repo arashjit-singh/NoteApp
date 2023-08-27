@@ -12,3 +12,4 @@ Clone the project from Android Studio after enabling VCS, and click on the run b
 4. Hilt for dependency injection
 
 # Application Screenshots
+<img src="https://github.com/arashjit-singh/NoteApp/blob/main/screenshots/running_app.gif">
