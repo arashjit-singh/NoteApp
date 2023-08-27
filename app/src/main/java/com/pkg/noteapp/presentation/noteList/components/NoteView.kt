@@ -5,9 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
@@ -43,7 +41,10 @@ fun NoteView(
         }
         .padding(top = 4.dp, bottom = 4.dp, start = 7.dp, end = 7.dp)
     ) {
-        Row(modifier = Modifier.background(color = Color(note.color.value)), verticalAlignment = Alignment.Bottom) {
+        Row(
+            modifier = Modifier.background(color = Color(note.color.value)),
+            verticalAlignment = Alignment.Bottom
+        ) {
             Column(
                 modifier = Modifier
                     .padding(7.dp)
@@ -54,10 +55,8 @@ fun NoteView(
                     style = TextStyle(
                         fontSize = 24.sp, fontWeight = FontWeight.SemiBold
                     ),
-                    modifier = Modifier.padding(7.dp),
-
-                    )
-                Spacer(modifier = Modifier.height(5.dp))
+                    modifier = Modifier.padding(7.dp)
+                )
                 Text(
                     text = note.description ?: "",
                     style = TextStyle(
@@ -77,7 +76,7 @@ fun NoteView(
                         .clickable {
                             onDeleteNode(note)
                         }
-                        .size(60.dp)
+                        .size(50.dp)
                         .align(Alignment.BottomEnd)
                         .padding(10.dp)
                 )
@@ -92,7 +91,7 @@ fun NotePreView() {
     NoteView(note = Note(
         id = null,
         title = "Lorem Ipsum",
-        description = "Lorem Ipsum",
+        description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. ",
         dateTime = 10L,
         color = ColorResource.Yellow
     ), onNoteClick = {

@@ -4,8 +4,6 @@ import androidx.room.withTransaction
 import com.pkg.noteapp.di.IoDispatcher
 import com.pkg.noteapp.domain.Note
 import com.pkg.noteapp.domain.NoteRepository
-import com.pkg.noteapp.domain.SortBy
-import com.pkg.noteapp.domain.SortOrder
 import com.pkg.noteapp.model.local.NoteDb
 import com.pkg.noteapp.model.local.NoteEntity
 import com.pkg.noteapp.model.mapper.toNote
@@ -38,7 +36,7 @@ class NoteRepoImpl(
         }
     }
 
-    override fun getAllNotes(sortBy: SortBy, sortOrder: SortOrder): Flow<List<Note>> =
+    override fun getAllNotes(): Flow<List<Note>> =
         noteDb.provideDao().getAllNotes().map { list ->
             list.map {
                 it.toNote()

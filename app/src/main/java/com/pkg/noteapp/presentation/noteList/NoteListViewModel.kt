@@ -1,6 +1,5 @@
 package com.pkg.noteapp.presentation.noteList
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pkg.noteapp.domain.Note
@@ -29,9 +28,7 @@ class NoteListViewModel @Inject constructor(
 
     private fun getAllNotesFromDb() {
         viewModelScope.launch {
-            repo.getAllNotes(
-                sortBy = _uiState.value.sortBy, sortOrder = _uiState.value.sortOrder
-            ).collect { list ->
+            repo.getAllNotes().collect { list ->
                 _uiState.value = _uiState.value.copy(
                     list = list
                 )
@@ -59,40 +56,63 @@ class NoteListViewModel @Inject constructor(
         }
     }
 
-    fun insertOrUpdateNote(note: Note) {
+    private fun insertOrUpdateNote(note: Note) {
         viewModelScope.launch {
             repo.insertOrUpdateNote(note)
         }
     }
 
     fun updateSortBy(sortBy: SortBy) {
-
-        Log.i("list", _uiState.value.list.toString())
-        Log.i("sortBy", sortBy.value)
-
-        val updatedList = _uiState.value.list.sortedBy {
-            it.dateTime
-        }
-
-        Log.i("updatedList", updatedList.toString())
-
         _uiState.value = _uiState.value.copy(
-            list = updatedList,
             sortBy = sortBy
         )
+        sortNoteList()
     }
 
     fun updateSortOrder(sortOrder: SortOrder) {
-        Log.i("value", _uiState.value.toString())
         _uiState.value = _uiState.value.copy(
             sortOrder = sortOrder
+        )
+        sortNoteList()
+    }
+
+    private fun sortNoteList() {
+        var sortedList: List<Note>
+        sortedList = when (_uiState.value.sortBy) {
+            SortBy.Title -> _uiState.value.list.sortedBy { it.title }
+            SortBy.Date -> _uiState.value.list.sortedBy { it.dateTime }
+            SortBy.Color -> _uiState.value.list.sortedBy { it.color.value }
+            else -> {
+                _uiState.value.list.sortedBy { it.title }
+            }
+        }
+
+        if (_uiState.value.sortOrder === SortOrder.Descending) {
+            sortedList = when (_uiState.value.sortBy) {
+                SortBy.Title -> sortedList
+                    .sortedByDescending { it.title }
+
+                SortBy.Date -> sortedList
+                    .sortedByDescending { it.dateTime }
+
+                SortBy.Color -> sortedList
+                    .sortedByDescending { it.color.value }
+
+                else -> {
+                    sortedList.sortedByDescending { it.title }
+                }
+            }
+        }
+
+        _uiState.value = _uiState.value.copy(
+            list = sortedList
         )
     }
 
     data class UiState(
         var list: List<Note> = emptyList(),
-        var sortBy: SortBy = SortBy.Date,
-        var sortOrder: SortOrder = SortOrder.Ascending,
+        var sortBy: SortBy? = null,
+        var sortOrder: SortOrder? = null,
         var message: String? = null,
     )
 }

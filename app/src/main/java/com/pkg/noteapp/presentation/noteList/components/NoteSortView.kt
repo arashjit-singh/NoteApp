@@ -25,8 +25,8 @@ fun NoteSortView(
     modifier: Modifier = Modifier,
     onUpdateSortBy: (SortBy) -> Unit,
     onUpdateSortOrder: (SortOrder) -> Unit,
-    sortBy: SortBy,
-    sortOrder: SortOrder,
+    sortBy: SortBy?,
+    sortOrder: SortOrder?,
 ) {
 
     var sortByTitle by rememberSaveable {
@@ -49,39 +49,42 @@ fun NoteSortView(
         mutableStateOf(false)
     }
 
-    LaunchedEffect(key1 = sortBy)
-    {
-        when (sortBy) {
-            SortBy.Color -> {
-                sortByColor = true
-                sortByTitle = false
-                sortByDate = false
-            }
+    LaunchedEffect(key1 = sortBy) {
+        sortBy?.let {
+            when (it) {
+                SortBy.Color -> {
+                    sortByColor = true
+                    sortByTitle = false
+                    sortByDate = false
+                }
 
-            SortBy.Date -> {
-                sortByColor = false
-                sortByTitle = false
-                sortByDate = true
-            }
+                SortBy.Date -> {
+                    sortByColor = false
+                    sortByTitle = false
+                    sortByDate = true
+                }
 
-            SortBy.Title -> {
-                sortByColor = false
-                sortByTitle = true
-                sortByDate = false
+                SortBy.Title -> {
+                    sortByColor = false
+                    sortByTitle = true
+                    sortByDate = false
+                }
             }
         }
     }
 
     LaunchedEffect(key1 = sortOrder) {
-        when (sortOrder) {
-            SortOrder.Ascending -> {
-                sortOrderDesc = false
-                sortOrderAsc = true
-            }
+        sortOrder?.let {
+            when (it) {
+                SortOrder.Ascending -> {
+                    sortOrderDesc = false
+                    sortOrderAsc = true
+                }
 
-            SortOrder.Descending -> {
-                sortOrderAsc = false
-                sortOrderDesc = true
+                SortOrder.Descending -> {
+                    sortOrderAsc = false
+                    sortOrderDesc = true
+                }
             }
         }
     }

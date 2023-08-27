@@ -83,7 +83,7 @@ fun NoteDetailScreen(
                 label = { Text(text = stringResource(R.string.label_title)) }
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             TextField(
                 value = state.value.description ?: "",

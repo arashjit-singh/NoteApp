@@ -46,7 +46,6 @@ fun NoteListScreen(
                 }
 
                 SnackbarResult.ActionPerformed -> {
-                    //undo delete
                     viewModel.undoNoteDelete()
                 }
             }
