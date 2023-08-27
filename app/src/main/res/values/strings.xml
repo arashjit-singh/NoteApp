@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Note App</string>
     <string name="your_notes">Your Notes</string>
+    <string name="add_note">Add Note</string>
+    <string name="undo">UNDO</string>
+    <string name="ascending">Ascending</string>
+    <string name="color">Color</string>
+    <string name="date">Date</string>
+    <string name="title">Title</string>
+    <string name="descending">Descending</string>
 </resources>

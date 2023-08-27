@@ -25,9 +25,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pkg.noteapp.R
+import com.pkg.noteapp.domain.SortBy
+import com.pkg.noteapp.domain.SortOrder
 
 @Composable
-fun NoteListHeader(modifier: Modifier = Modifier) {
+fun NoteListHeader(
+    modifier: Modifier = Modifier,
+    onUpdateSortBy: (SortBy) -> Unit,
+    onUpdateSortOrder: (SortOrder) -> Unit,
+    sortBy: SortBy,
+    sortOrder: SortOrder,
+) {
 
     var showNoteSortView by rememberSaveable {
         mutableStateOf(false)
@@ -63,7 +71,14 @@ fun NoteListHeader(modifier: Modifier = Modifier) {
 
         if (showNoteSortView) {
             AnimatedVisibility(visible = showNoteSortView) {
-                NoteSortView()
+                NoteSortView(onUpdateSortBy = {
+                    onUpdateSortBy(it)
+                }, onUpdateSortOrder = {
+                    onUpdateSortOrder(it)
+                },
+                    sortBy = sortBy,
+                    sortOrder = sortOrder
+                )
             }
         }
     }
@@ -74,5 +89,10 @@ fun NoteListHeader(modifier: Modifier = Modifier) {
 @Composable
 @Preview
 fun PreviewNoteListHeader() {
-    NoteListHeader()
+    NoteListHeader(
+        onUpdateSortBy = {},
+        onUpdateSortOrder = {},
+        sortOrder = SortOrder.Ascending,
+        sortBy = SortBy.Date
+    )
 }

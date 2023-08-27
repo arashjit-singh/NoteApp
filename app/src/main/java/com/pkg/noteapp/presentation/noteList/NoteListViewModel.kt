@@ -1,6 +1,6 @@
 package com.pkg.noteapp.presentation.noteList
 
-import androidx.lifecycle.SavedStateHandle
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pkg.noteapp.domain.Note
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteListViewModel @Inject constructor(
-    private val repo: NoteRepository
+    private val repo: NoteRepository,
 ) : ViewModel() {
 
     private var _uiState = MutableStateFlow(UiState())
@@ -30,8 +30,7 @@ class NoteListViewModel @Inject constructor(
     private fun getAllNotesFromDb() {
         viewModelScope.launch {
             repo.getAllNotes(
-                sortBy = _uiState.value.sortBy,
-                sortOrder = _uiState.value.sortOrder
+                sortBy = _uiState.value.sortBy, sortOrder = _uiState.value.sortOrder
             ).collect { list ->
                 _uiState.value = _uiState.value.copy(
                     list = list
@@ -44,6 +43,9 @@ class NoteListViewModel @Inject constructor(
         viewModelScope.launch {
             currentNote = note
             repo.deleteNote(note)
+            _uiState.value = _uiState.value.copy(
+                message = "Note Deleted"
+            )
         }
     }
 
@@ -51,6 +53,9 @@ class NoteListViewModel @Inject constructor(
         currentNote?.let {
             insertOrUpdateNote(it)
             currentNote = null
+            _uiState.value = _uiState.value.copy(
+                message = null
+            )
         }
     }
 
@@ -61,13 +66,27 @@ class NoteListViewModel @Inject constructor(
     }
 
     fun updateSortBy(sortBy: SortBy) {
-        _uiState.value.sortBy = sortBy
-        getAllNotesFromDb()
+
+        Log.i("list", _uiState.value.list.toString())
+        Log.i("sortBy", sortBy.value)
+
+        val updatedList = _uiState.value.list.sortedBy {
+            it.dateTime
+        }
+
+        Log.i("updatedList", updatedList.toString())
+
+        _uiState.value = _uiState.value.copy(
+            list = updatedList,
+            sortBy = sortBy
+        )
     }
 
     fun updateSortOrder(sortOrder: SortOrder) {
-        _uiState.value.sortOrder = sortOrder
-        getAllNotesFromDb()
+        Log.i("value", _uiState.value.toString())
+        _uiState.value = _uiState.value.copy(
+            sortOrder = sortOrder
+        )
     }
 
     data class UiState(
