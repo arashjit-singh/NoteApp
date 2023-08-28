@@ -13,6 +13,6 @@ ext {
     hiltNavigationCompose_version = '1.0.0'
     timber_version = '5.0.1'
     splash_screen_api = "1.0.0-beta02"
-    navigationCompose="2.7.0"
+    navigationCompose="2.7.1"
     openCsv_version="5.5.2"
 }

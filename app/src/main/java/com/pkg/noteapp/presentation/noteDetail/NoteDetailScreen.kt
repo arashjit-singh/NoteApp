@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
@@ -32,7 +31,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pkg.noteapp.R
 import com.pkg.noteapp.presentation.noteDetail.components.ColorPickerView
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteDetailScreen(
     viewModel: NoteDetailsViewModel = hiltViewModel(),
@@ -41,8 +39,7 @@ fun NoteDetailScreen(
 
     val state = viewModel.uiState.collectAsState()
 
-    LaunchedEffect(key1 = state.value.message)
-    {
+    LaunchedEffect(key1 = state.value.message) {
         state.value.message?.let {
             snackbarHostState.showSnackbar(it)
             viewModel.snackBarShown()
@@ -66,41 +63,33 @@ fun NoteDetailScreen(
                 viewModel.updateBgColor(it)
             })
 
-            TextField(
-                value = state.value.title ?: "",
-                onValueChange = {
-                    viewModel.updateTitle(it)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
-                    textColor = Color.Black,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ), textStyle = TextStyle(
-                    fontSize = 24.sp
-                ),
-                label = { Text(text = stringResource(R.string.label_title)) }
-            )
+            TextField(value = state.value.title ?: "", onValueChange = {
+                viewModel.updateTitle(it)
+            }, modifier = Modifier.fillMaxWidth(), colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ), textStyle = TextStyle(
+                fontSize = 24.sp
+            ), label = { Text(text = stringResource(R.string.label_title)) })
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            TextField(
-                value = state.value.description ?: "",
-                onValueChange = {
-                    viewModel.updateDescription(it)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
-                    textColor = Color.Black,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ), textStyle = TextStyle(
-                    fontSize = 24.sp
-                ),
-                label = { Text(text = stringResource(R.string.description)) }
-            )
+            TextField(value = state.value.description ?: "", onValueChange = {
+                viewModel.updateDescription(it)
+            }, modifier = Modifier.fillMaxWidth(), colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ), textStyle = TextStyle(
+                fontSize = 24.sp
+            ), label = { Text(text = stringResource(R.string.description)) })
         }
 
         FloatingActionButton(
