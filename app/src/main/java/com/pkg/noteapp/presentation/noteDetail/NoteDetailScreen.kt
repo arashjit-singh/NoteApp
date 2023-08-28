@@ -1,5 +1,6 @@
 package com.pkg.noteapp.presentation.noteDetail
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +41,10 @@ fun NoteDetailScreen(
 
     val state = viewModel.uiState.collectAsState()
 
+    val animatedColor by animateColorAsState(
+        Color(state.value.color.value)
+    )
+
     LaunchedEffect(key1 = state.value.message) {
         state.value.message?.let {
             snackbarHostState.showSnackbar(it)
@@ -49,7 +55,7 @@ fun NoteDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(state.value.color.value))
+            .background(color = animatedColor)
     ) {
         Column(
             modifier = Modifier
